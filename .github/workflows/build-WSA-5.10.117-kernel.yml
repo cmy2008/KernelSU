@@ -65,7 +65,7 @@ jobs:
       - name: Setup kernel source
         uses: actions/checkout@v3
         with:
-          repository: microsoft/WSA-Linux-Kernel
+          repository: cmy2008/WSA-Linux-Kernel
           ref: android-lts/latte/${{ matrix.version }}
           path: WSA-Linux-Kernel
 
