@@ -64,6 +64,7 @@ jobs:
 
       - name: Setup kernel source
         run: |
+          git init
           git config --global --add safe.directory /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel
           git init /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel
           git remote add origin https://github.com/cmy2008/WSA-Linux-Kernel
