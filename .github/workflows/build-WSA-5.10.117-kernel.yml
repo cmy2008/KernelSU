@@ -79,6 +79,8 @@ jobs:
         run: |
           echo "[+] KernelSU setup"
           KERNEL_ROOT=$GITHUB_WORKSPACE/WSA-Linux-Kernel
+          echo "[+] Config copy"
+          wget "https://github.com/cmy2008/WSA-Linux-Kernel/raw/linux-msft-wsa-5.10.y/configs/wsa/config-wsa-5.10" -o $KERNEL_ROOT/configs/wsa/config-wsa-5.10
           echo "[+] KERNEL_ROOT: $KERNEL_ROOT"
           echo "[+] Copy KernelSU driver to $KERNEL_ROOT/drivers"
           ln -sf $GITHUB_WORKSPACE/KernelSU/kernel $KERNEL_ROOT/drivers/kernelsu
