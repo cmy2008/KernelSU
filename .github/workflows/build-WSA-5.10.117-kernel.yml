@@ -54,7 +54,6 @@ jobs:
           sudo ln -s --force /usr/bin/llvm-objcopy-$LLVM_VERSION /usr/bin/llvm-objcopy
           sudo ln -s --force /usr/bin/llvm-readelf-$LLVM_VERSION /usr/bin/llvm-readelf
           sudo ln -s --force /usr/bin/clang++-$LLVM_VERSION /usr/bin/clang++
-
       - name: Checkout KernelSU
         uses: actions/checkout@v3
         with:
@@ -63,10 +62,11 @@ jobs:
           fetch-depth: 0
 
       - name: Setup kernel source
-        run: |
-          git init && git config --global --add safe.directory /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel && git init /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel && git remote add origin https://github.com/cmy2008/WSA-Linux-Kernel && git config --local gc.auto 0 && git config --local --name-only --get-regexp core\.sshCommand && git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :" && git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader && git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :" && git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +refs/heads/android-lts/latte/5.10.117.2*:refs/remotes/origin/android-lts/latte/5.10.117.2* +refs/tags/android-lts/latte/5.10.117.2*:refs/tags/android-lts/latte/5.10.117.2*
-          
-          
+        uses: actions/checkout@v3
+        with:
+          repository: microsoft/WSA-Linux-Kernel
+          ref: android-lts/latte/${{ matrix.version }}
+          path: WSA-Linux-Kernel
 
       - name: Setup Ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -88,13 +88,11 @@ jobs:
           echo "[+] Apply KernelSU patches"
           cd $KERNEL_ROOT && git apply $GITHUB_WORKSPACE/KernelSU/.github/patches/5.10/*.patch
           echo "[+] KernelSU setup done."
-
       - name: Build Kernel
         working-directory: WSA-Linux-Kernel
         run: |
           cp configs/wsa/${{ matrix.make_config }}-5.10 .config
           make -j`nproc` LLVM=1 ARCH=${{ matrix.arch }} CROSS_COMPILE=${{ matrix.cross_compile }} ${{ matrix.file_name }} CCACHE="/usr/bin/ccache"
-
       - name: Upload kernel-${{ matrix.arch }}-${{ matrix.version }}
         uses: actions/upload-artifact@v3
         with:
