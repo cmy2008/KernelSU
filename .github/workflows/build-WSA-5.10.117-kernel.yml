@@ -64,16 +64,7 @@ jobs:
 
       - name: Setup kernel source
         run: |
-          git init
-          git config --global --add safe.directory /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel
-          git init /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel
-          git remote add origin https://github.com/cmy2008/WSA-Linux-Kernel
-          git config --local gc.auto 0
-          git config --local --name-only --get-regexp core\.sshCommand
-          git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-          git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-          git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-          git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +refs/heads/android-lts/latte/5.10.117.2*:refs/remotes/origin/android-lts/latte/5.10.117.2* +refs/tags/android-lts/latte/5.10.117.2*:refs/tags/android-lts/latte/5.10.117.2*
+          git init && git config --global --add safe.directory /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel && git init /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel && git remote add origin https://github.com/cmy2008/WSA-Linux-Kernel && git config --local gc.auto 0 && git config --local --name-only --get-regexp core\.sshCommand && git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :" && git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader && git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :" && git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +refs/heads/android-lts/latte/5.10.117.2*:refs/remotes/origin/android-lts/latte/5.10.117.2* +refs/tags/android-lts/latte/5.10.117.2*:refs/tags/android-lts/latte/5.10.117.2*
           
           
 
