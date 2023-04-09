@@ -28,7 +28,7 @@ jobs:
             arch: arm64
 
     name: Build WSA-Kernel-${{ matrix.version }}-${{ matrix.arch }}
-    runs-on: ubuntu-20.04
+    runs-on: self-hosted
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
       CCACHE_NOHASHDIR: "true"
