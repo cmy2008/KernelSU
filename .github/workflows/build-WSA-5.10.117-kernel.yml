@@ -81,7 +81,6 @@ jobs:
           KERNEL_ROOT=$GITHUB_WORKSPACE/WSA-Linux-Kernel
           echo "[+] Config copy"
           wget -O /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel/configs/wsa/config-wsa-5.10 "https://github.com/cmy2008/WSA-Linux-Kernel/raw/linux-msft-wsa-5.10.y/configs/wsa/config-wsa-5.10"
-          chmod -x /home/runner/work/KernelSU/KernelSU/WSA-Linux-Kernel/configs/wsa/config-wsa-5.10
           echo "[+] KERNEL_ROOT: $KERNEL_ROOT"
           echo "[+] Copy KernelSU driver to $KERNEL_ROOT/drivers"
           ln -sf $GITHUB_WORKSPACE/KernelSU/kernel $KERNEL_ROOT/drivers/kernelsu
