@@ -16,19 +16,15 @@ jobs:
   build:
     strategy:
       matrix:
-        arch: [x86_64, arm64]
+        arch: [x86_64]
         version: [5.10.117.2]
         include:
           - file_name: "bzImage"
             make_config: "config-wsa"
             arch: x86_64
-          - file_name: "Image"
-            cross_compile: "aarch64-linux-gnu"
-            make_config: "config-wsa-arm64"
-            arch: arm64
 
     name: Build WSA-Kernel-${{ matrix.version }}-${{ matrix.arch }}
-    runs-on: self-hosted
+    runs-on: ubuntu-20.04
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
       CCACHE_NOHASHDIR: "true"
