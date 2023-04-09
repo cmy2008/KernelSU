@@ -50,6 +50,7 @@ jobs:
           sudo ln -s --force /usr/bin/llvm-objcopy-$LLVM_VERSION /usr/bin/llvm-objcopy
           sudo ln -s --force /usr/bin/llvm-readelf-$LLVM_VERSION /usr/bin/llvm-readelf
           sudo ln -s --force /usr/bin/clang++-$LLVM_VERSION /usr/bin/clang++
+
       - name: Checkout KernelSU
         uses: actions/checkout@v3
         with:
@@ -75,8 +76,6 @@ jobs:
         run: |
           echo "[+] KernelSU setup"
           KERNEL_ROOT=$GITHUB_WORKSPACE/WSA-Linux-Kernel
-          echo "[+] Config copy"
-          cp $GITHUB_WORKSPACE/KernelSU/config-wsa-5.10 $KERNEL_ROOT/configs/wsa/config-wsa-5.10
           echo "[+] KERNEL_ROOT: $KERNEL_ROOT"
           echo "[+] Copy KernelSU driver to $KERNEL_ROOT/drivers"
           ln -sf $GITHUB_WORKSPACE/KernelSU/kernel $KERNEL_ROOT/drivers/kernelsu
@@ -86,11 +85,15 @@ jobs:
           echo "[+] Apply KernelSU patches"
           cd $KERNEL_ROOT && git apply $GITHUB_WORKSPACE/KernelSU/.github/patches/5.10/*.patch
           echo "[+] KernelSU setup done."
+
       - name: Build Kernel
         working-directory: WSA-Linux-Kernel
         run: |
           cp configs/wsa/${{ matrix.make_config }}-5.10 .config
+          sed -i '4183d' .config
+          sed -i "4183i "CONFIG_CIFS=y\\nCONFIG_CIFS_ALLOW_INSECURE_LEGACY=y\\nCONFIG_CIFS_XATTR=y\\nCONFIG_CIFS_POSIX=y\\nCONFIG_CIFS_DEBUG=y\\nCONFIG_CIFS_FSCACHE=y"" .config
           make -j`nproc` LLVM=1 ARCH=${{ matrix.arch }} CROSS_COMPILE=${{ matrix.cross_compile }} ${{ matrix.file_name }} CCACHE="/usr/bin/ccache"
+
       - name: Upload kernel-${{ matrix.arch }}-${{ matrix.version }}
         uses: actions/upload-artifact@v3
         with:
